@@ -1,0 +1,11 @@
+data/raw/*.zip
+__pycache__/
+.pytest_cache/
+.ruff_cache/
+*.pyc
+.venv/
+results/*.npz
+.DS_Store
+notebooks/__marimo__/
+.env
+.env.*

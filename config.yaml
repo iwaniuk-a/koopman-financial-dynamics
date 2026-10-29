@@ -1,0 +1,38 @@
+data:
+  path: data/processed/factors_daily.csv
+
+splits:
+  scale_estimation_end: "2004-12-31"
+  dev_target_start: "2005-01-01"
+  dev_target_end: "2014-12-31"
+  test_target_start: "2015-01-01"
+  test_target_end: null
+
+window: 756
+window_sensitivity:
+  - 504
+  - 1008
+
+tau_grid:
+  min_exp: -2
+  max_exp: 3
+  num: 12
+
+selection:
+  block_length: 20
+
+bootstrap:
+  block_lengths:
+    - 5
+    - 20
+    - 60
+  n_boot: 2000
+  seed: 20261021
+
+ewma_lambdas:
+  - 0.90
+  - 0.94
+  - 0.97
+  - 0.99
+
+spectral_tau: 1.519911
