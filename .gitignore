@@ -9,3 +9,7 @@ results/*.npz
 notebooks/__marimo__/
 .env
 .env.*
+.Rhistory
+.RData
+.Ruserdata
+.Rproj.user/

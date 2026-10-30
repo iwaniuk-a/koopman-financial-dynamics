@@ -14,7 +14,7 @@ It is organized as a research pipeline:
 5. extend DMD to polynomial observables with EDMD
 6. compare volatility forecasts against HAR, EWMA, and GARCH
 
-The project does not assume that a Koopman model will beat GARCH.
+We do not assume that a Koopman model will beat GARCH.
 
 ## Research questions
 
@@ -85,19 +85,20 @@ $$
 
 For $\lambda=re^{i\theta}$:
 
-- $r<1$ represents decay in the fitted approximation;
-- $r>1$ represents growth;
-- $\theta$ is an oscillatory phase increment;
+- $r<1$ represents decay
+- $r>1$ represents growth
+- $\theta$ is an oscillatory phase increment
 - for $0<r<1$, an approximate half-life is
-  $\log(1/2)/\log(r)$;
+  $\log(\frac12)/\log(r)$;
 - for $\theta\neq0$, an approximate period is $2\pi/|\theta|$ steps.
 
-In noisy financial data these are properties of a finite-sample operator, not
-automatically structural economic facts. The notebooks therefore inspect rank,
+In noisy financial data these are properties of a finite-sample operator. The notebooks therefore inspect rank,
 centering, window length, and forecast performance before interpreting a
 spectrum.
 
 ### Dynamic Mode Decomposition
+DMD is a finite-dimensional approximation of the Koopman Operator. It takes snapshot data from a system over time and attempts to find a linear matrix that best steps the data forward in time. However, standard DMD uses the linear state itself as its observables. If the underlying system is highly non-linear, standard DMD will struggle to accurately approximate the Koopman operator because it hasn't properly lifted the data into a richer functional space.
+
 
 With consecutive column snapshots
 
@@ -139,6 +140,7 @@ $$
 which is equivalent to an intercept VAR at full rank.
 
 ### Extended Dynamic Mode Decomposition
+Instead of just feeding the raw state data into the DMD algorithm, EDMD first transforms the data using a dictionary of non-linear observables (e.g., polynomials, trigonometric functions). By lifting the data into this higher-dimensional space before applying DMD, EDMD provides a much more accurate finite approximation of the true infinite-dimensional Koopman Operator.
 
 EDMD chooses a finite dictionary of observables
 
@@ -172,15 +174,13 @@ $$
 $$
 
 $$
-\psi_{\mathrm{squares}}(z)
-=(z_1,\ldots,z_6,z_1^2,\ldots,z_6^2),
+\psi_{\mathrm{squares}}(z)=(z_1,\ldots,z_6,z_1^2,\ldots,z_6^2),
 $$
 
 and
 
 $$
-\psi_{\mathrm{full}}(z)
-=(z_1,\ldots,z_6,z_1^2,\ldots,z_6^2,(z_i z_j)_{i<j}).
+\psi_{\mathrm{full}}(z)=(z_1,\ldots,z_6,z_1^2,\ldots,z_6^2,(z_i z_j)_{i<j}).
 $$
 
 Their dimensions are $6$, $12$, and
@@ -197,8 +197,7 @@ $$
 $$
 
 The unconstrained polynomial EDMD regression can produce negative
-second-moment forecasts. The current notebook reports that frequency as a
-diagnostic instead of silently clipping the forecasts.
+second-moment forecasts.
 
 ## Data and statistical setup
 
@@ -214,7 +213,7 @@ The processed panel contains 15,897 observations from 1963-07-01 through
 | CMA | Conservative-minus-aggressive investment return |
 | MOM | Momentum return |
 
-The source archives report percentage returns. The processed panel stores
+The source archives report percentage returns, while the processed panel stores
 decimal returns. The five-factor and momentum archives are joined on date, and
 the risk-free rate is excluded from the six-factor modeling panel.
 
@@ -226,7 +225,7 @@ Notebook 02 studies:
 - same-day cross-factor correlations and their eigenvalue spectrum
 - lag-one stability across broad historical subperiods
 
-## Forecasting protocol
+## Forecasting
 
 At origin $t$, a model with window length $W$ sees only
 
@@ -271,11 +270,6 @@ forecast-loss differences.
 
 ## Results and interpretation
 
-The numbers below are recomputed from the checked-in processed snapshot using
-the current notebook definitions. The notebooks also
-compute paired block-bootstrap intervals, but those intervals are not committed
-as a separate results table.
-
 ### The data support a volatility study more strongly than a return-prediction study
 
 Signed-return lag-one autocorrelation ranges from 0.015 for MKT to 0.157 for
@@ -287,7 +281,6 @@ more visible in volatility-related observables than in the return levels.
 The cross-factor correlation matrix also has a nontrivial but not dominant
 common component. Its first three eigenvalues explain approximately 30.2%,
 23.1%, and 17.8% of standardized cross-sectional variation, respectively.
-The factors are related, but the panel is not effectively one-dimensional.
 
 ### DMD gives a useful baseline
 
@@ -297,8 +290,7 @@ periods near 11.4 and 27.6 trading days, but their moduli are only about 0.207
 and 0.242. Their implied half-lives are less than one trading day.
 
 The appropriate interpretation is therefore rapid decay in the fitted linear
-return dynamics, not a persistent cycle or a stable signal. The centered
-DMD operator agrees with the intercept VAR, confirming that DMD is a spectral
+return dynamics. The centered DMD operator agrees with the intercept VAR, confirming that DMD is a spectral
 representation of the linear baseline.
 
 ### Signed-return forecasts show only marginal gains
@@ -316,8 +308,7 @@ $\tau=15.20$, and has a similarly small improvement of roughly 0.10%.
 | Full EDMD | 1.6897 | 0.05% | $\tau=43.29$ |
 
 The polynomial dictionaries therefore do not demonstrate a meaningful
-development-period advantage over the linear ridge model. This is a useful
-negative result: adding nonlinear observables alone does not make daily factor
+development-period advantage over the linear ridge model. We conclude that adding nonlinear observables alone does not make daily factor
 returns predictably nonlinear. The best signed-return EDMD forecasts are also
 not automatically valid volatility forecasts. At their selected settings,
 roughly 29% of Squares EDMD and 28% of Full EDMD factor-date forecasts of
@@ -348,7 +339,7 @@ These results support three conclusions:
    this specification and sample.
 
 The volatility results are stronger than the signed-return results, but they do
-not yet establish a Koopman advantage: the current best performers are EWMA and
+not yet establish a Koopman advantage. The current best performers are EWMA and
 GARCH, while the existing EDMD volatility forecasts are slightly weaker than a
 direct squared-return VAR. The honest conclusion is that the project validates
 the operator framework and reveals where nonlinear dynamics live, but does not
@@ -358,7 +349,7 @@ yet show an advantage of polynomial EDMD.
 
 > Daily factor returns have little stable linear predictability, while their
 > volatility has substantial persistence. DMD provides a transparent spectral
-> view of the short-memory return dynamics, and EDMD provides a principled way
+> view of the short-memory return dynamics, and EDMD provides a way
 > to test nonlinear observables. In the current sample, however, polynomial
 > EDMD does not outperform regularized linear or classical volatility models.
 
