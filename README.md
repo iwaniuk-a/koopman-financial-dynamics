@@ -180,11 +180,7 @@ $$
 and
 
 $$
-\psi_{\mathrm{full}}(z)=\left(
-z_1,\ldots,z_6,\,
-z_1^2,\ldots,z_6^2,\,
-z_i z_j \;:\; 1\leq i<j\leq 6
-\right).
+\psi_{\mathrm{full}}(z)=\left(z_1,\ldots,z_6,\,z_1^2,\ldots,z_6^2,\,z_i z_j \;:\; 1\leq i \lt j\leq 6\right).
 $$
 
 The three dictionaries have dimensions \(6\), \(12\), and \(27\):
