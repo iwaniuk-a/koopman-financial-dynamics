@@ -180,13 +180,23 @@ $$
 and
 
 $$
-\psi_{\mathrm{full}}(z)=(z_1,\ldots,z_6,z_1^2,\ldots,z_6^2,(z_i z_j)_{i<j}).
+\psi_{\mathrm{full}}(z)
+=
+\left(
+z_1,\ldots,z_6,\,
+z_1^2,\ldots,z_6^2,\,
+z_i z_j \;:\; 1\leq i<j\leq 6
+\right).
 $$
 
-Their dimensions are $6$, $12$, and
+The three dictionaries have dimensions \(6\), \(12\), and \(27\):
 
 $$
-6+\frac{6(6+1)}{2}=27.
+6+6+\binom{6}{2}
+=
+6+\frac{6(6+1)}{2}
+=
+27.
 $$
 
 For squared-return forecasts, the inverse transformation is
